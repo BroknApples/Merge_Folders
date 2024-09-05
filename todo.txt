@@ -1,0 +1,5 @@
+create file that states the pages that each original folder would've started at
+
+finish the combining functions
+
+change order parsing algorithm to allow of 2+ digit numbers
