@@ -1,5 +1,3 @@
-create file that states the pages that each original folder would've started at
+create key file that states the pages that each original folder would've started at pg 084 = pt2 120 = pt3 etc.
 
 finish the combining functions
-
-change order parsing algorithm to allow of 2+ digit numbers
