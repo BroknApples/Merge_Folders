@@ -23,22 +23,14 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
 int main() {
   fs::path curr_directory = fs::current_path();
   const std::string kProgramFilename = "combine_folders.exe";
+  const std::string kDesktopINI = "desktop.ini";
   const int kProgramFilenameLength = kProgramFilename.length();
 
   std::vector<fs::path> files;
   // Search directory and add to list
   for (const auto& file : fs::directory_iterator(curr_directory)) {
-    // do not include program file in list
-    std::string str = file.path().string();
-    int temp_length = str.length();
-
-    bool isProgramFile = true;
-    for (int i = 0; i < kProgramFilenameLength; i++) {
-      if (str[(temp_length - kProgramFilenameLength) + i] != kProgramFilename[i]) isProgramFile = false;
-    }
-
-    // don't add program file to list
-    if (isProgramFile) continue;
+    // Do not add program file to list
+    if (file.path().filename() == kProgramFilename || file.path().filename() == kDesktopINI) continue;
     
     files.push_back(file.path());
   }
