@@ -1,3 +1,0 @@
-create key file that states the pages that each original folder would've started at pg 084 = pt2 120 = pt3 etc.
-perhaps create a backup folder holding all previous files instead of deleting them?
-// or add stack that holds each file's old name nad new name and allow user to undo

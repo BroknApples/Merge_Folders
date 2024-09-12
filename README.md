@@ -1,8 +1,7 @@
-Can combine 9 or less folders containing ordered image files
+Combines folders that contains only ordered files,
+make sure every file is ordered properly or it will not give you the expected result
 
-Lists all files in the current directory and prompts the user for the
-order of the files they wish to use. Not all files must be used.
+txt file showing how to use included in release folder
 
-How to use:
-
-in order to move file back use rename function and change the last folder it is in to something else or delete it
+Created using filesystem library in C++
+Will only compile in c++17 (and above and in the future if nothing breaks)
