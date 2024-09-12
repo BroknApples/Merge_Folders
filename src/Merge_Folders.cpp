@@ -22,7 +22,7 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
 
 int main() {
   fs::path curr_directory = fs::current_path();
-  const std::string kProgramFilename = "combine_folders.exe";
+  const std::string kProgramFilename = "Merge_Folders.exe";
   const std::string kDesktopINI = "desktop.ini";
   const int kProgramFilenameLength = kProgramFilename.length();
 
@@ -46,7 +46,7 @@ int main() {
     std::cout << "File order: \n";
     int idx = 0;
     for (auto& file : ordering_list) {
-      std::cout << idx << " - " << file << "\n";
+      std::cout << idx << " - " << file.filename() << "\n";
       idx++;
     }
     std::cout << "Press '/' and press ENTER if this is correct, type 'any other character' and press ENTER to go back: ";
@@ -171,7 +171,7 @@ std::vector<fs::path> PrintAndChangeOrder(std::vector<fs::path>& files) {
     std::cout << "Files in directory: " << std::endl;
     int idx = 0;
     for (auto& file : files) {
-      std::cout << idx << " - " << file << "\n";
+      std::cout << idx << " - " << file.filename() << "\n";
       idx++;
     }
     
@@ -369,7 +369,10 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
                                  + std::to_string(idx_num) + file_extension;
       idx_num++;
 
-      std::cout << "Old filename: " << old_filename << "\nNew filename: " << new_filename << "\n";
+      std::string print_temp1 = curr_folder.filename().string() + "\\" + file.path().filename().string();
+      std::string print_temp2 = ordering_list[0].filename().string() + "\\" + std::to_string(idx_num) + file_extension;
+
+      std::cout << "Old filename: " << print_temp1 << "\nNew filename: " << print_temp2 << "\n";
       fs::rename(old_filename.c_str(), new_filename.c_str());
 
       if (first_loop) {
