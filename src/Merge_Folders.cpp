@@ -36,8 +36,8 @@ int main() {
   }
 
   std::vector<fs::path> ordering_list;
-  bool is_valid = true;
-  while (is_valid) {
+  bool is_valid = false;
+  while (!is_valid) {
     // Get files to include
     ordering_list = PrintAndChangeOrder(files);
     std::cout << std::endl;
@@ -55,7 +55,13 @@ int main() {
     std::getline(std::cin, input);
     std::cout << std::endl;
 
-    if (input != "0" && input.length() > 0) is_valid = false;
+    int len = input.length();
+    if (input[0] == '/' && len == 1) {
+      is_valid = true;
+    }
+    else {
+      is_valid = false;
+    }
   }
 
   if (ordering_list.size() == 1) {
@@ -202,6 +208,7 @@ std::vector<fs::path> PrintAndChangeOrder(std::vector<fs::path>& files) {
 
     // Add file at corresponding index to end of ordering list
     ordering_list.push_back(files[val]);
+    val = 0;
   }
 
   return ordering_list;
@@ -304,7 +311,7 @@ void AddToIndexFile(fs::path folder, std::string idx_filename, std::string new_f
     std::cout << "Error creating index file." << std::endl;
     return;
   } else {
-    std::cout << "Index file created." << std::endl;
+    std::cout << "Appending to index file." << std::endl;
   }
 
   ofStream << folder_idx << " - '" << folder.stem().string() << "'" << std::endl;
@@ -369,28 +376,32 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
                                  + std::to_string(idx_num) + file_extension;
       idx_num++;
 
+      if (first_loop) {
+        // Add to index file
+        AddToIndexFile(curr_folder, idx_filename, (zeroes + std::to_string(idx_num - 1)), folder_idx);
+        first_loop = false;
+      }
+
       std::string print_temp1 = curr_folder.filename().string() + "\\" + file.path().filename().string();
       std::string print_temp2 = ordering_list[0].filename().string() + "\\" + std::to_string(idx_num) + file_extension;
 
       std::cout << "Old filename: " << print_temp1 << "\nNew filename: " << print_temp2 << "\n";
       fs::rename(old_filename.c_str(), new_filename.c_str());
 
-      if (first_loop) {
-        // Add to index file
-        AddToIndexFile(curr_folder, idx_filename, (zeroes + std::to_string(idx_num - 1)), folder_idx);
-        first_loop = false;
-      }
+      
     }
 
     // Delete empty folder if its not the first in the ordering_list
-    if (curr_folder != ordering_list[0]) {
+    if (curr_folder.filename() != ordering_list[0].filename()) {
       std::error_code error_code;
       if (!fs::remove(curr_folder, error_code)) {
         std::cout << error_code.message() << std::endl;
+      } else {
+        std::cout << "Deleted folder:  " << curr_folder.filename() << "\n";
       }
     }
 
-    
+    std::cout << std::endl;
 
     folder_idx++;
   }
