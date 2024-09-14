@@ -355,6 +355,8 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
   for (const auto& curr_folder : ordering_list) {
     bool first_loop = true;
     for (const auto& file : fs::directory_iterator(curr_folder)) {
+      if (file.path().filename() == "desktop.ini") continue;
+
       std::string old_filename = file.path().string();
       std::string file_extension = file.path().extension().string();
 
