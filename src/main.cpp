@@ -442,18 +442,22 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
 *
 */
 
-#include <array>
+#include <vector>
 #include <filesystem>
 
 #include "folder_merger.hpp"
-#include "constants.hpp"
 
 int main() {
   FolderMerger folder_merger(std::filesystem::current_path());
-  std::array<std::filesystem::path, EXCLUDE_SIZE> excludes = {
+
+  // exclude the files listed in 'excludes' from the directory search
+  int EXCLUDE_SIZE = 2;
+  std::vector<std::filesystem::path> excludes(EXCLUDE_SIZE);
+  excludes = {
     "desktop.ini",
     folder_merger.getName()
   };
+
   folder_merger.addToExcludeList(excludes);
   folder_merger.run();
   // folder_merger.getDirectoryEntries();

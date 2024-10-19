@@ -24,8 +24,8 @@ txt file showing how to use included in release folder
 ```
 
 ### Running program
-1. Place FolderMerge.exe in a directory | TODO: enter image here that shows where to put file
-2. Double click file OR run open folder in terminal and run this command:
+1. Place FolderMerger.exe in a directory | TODO: enter image here that shows where to put file
+2. Double click file OR open folder in terminal and run this command:
 ```console
 FolderMerger.exe
 ```

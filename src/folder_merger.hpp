@@ -3,11 +3,8 @@
 
 #include <iostream>
 #include <vector>
-#include <array>
 #include <unordered_map>
 #include <filesystem>
-
-#include "constants.hpp"
 
 class FolderMerger {
  private:
@@ -31,7 +28,7 @@ class FolderMerger {
  public:
   FolderMerger(std::filesystem::path main_directory);
 
-  void addToExcludeList(std::array<std::filesystem::path, EXCLUDE_SIZE>& exclude_list);
+  void addToExcludeList(std::vector<std::filesystem::path>& exclude_list);
   void run();
   
   const std::filesystem::path getName() const { return m_name; }
