@@ -9,7 +9,7 @@
         "-g",
         "${file}",
         "-o",
-        "${fileDirname}\\${fileBasenameNoExtension}.exe"
+        "${fileDirname}\\FolderMerger.exe"
       ],
       "options": {
         "cwd": "C:\\msys64\\mingw64\\bin"
