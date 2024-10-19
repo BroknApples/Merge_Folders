@@ -30,8 +30,8 @@ bool FolderMerger::isValidEntry(std::filesystem::path entry) {
 }
 
 bool isProperFormat(const std::string& str, const int max_length) {
-  // TODO: Copied file, Check if this needs to be
-  // reformatted after v2.0.0 is published
+  // TODO: Copied function from version 1, Check if this 
+  // needs to be reformatted after version 2 is published
 
   if (str[0] == '/' && str.length() == 1) return true;
 
@@ -94,11 +94,15 @@ FolderMerger::FolderMerger(std::filesystem::path main_directory)
   m_name = "FolderMerger.exe";
 }
 
-
-
 void FolderMerger::addToExcludeList(std::array<std::filesystem::path, EXCLUDE_SIZE>& exclude_list) {
   for (auto& file : exclude_list) {
     m_exclude_list[file]++;
   }
-  
+}
+
+void FolderMerger::run() {
+  bool running = true;
+  while(running) {
+    // TODO: run program here
+  }
 }

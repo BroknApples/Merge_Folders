@@ -26,13 +26,14 @@ class FolderMerger {
   bool isValidEntry(std::filesystem::path entry);
   bool isProperFormat(const std::string& str, const int max_length);
 
+  std::vector<std::filesystem::path> getDirectoryEntries(std::filesystem::path directory);
+
  public:
   FolderMerger(std::filesystem::path main_directory);
 
-  std::vector<std::filesystem::path> getDirectoryEntries();
   void addToExcludeList(std::array<std::filesystem::path, EXCLUDE_SIZE>& exclude_list);
-
-  const std::filesystem::path getMainDir() const { return m_main_directory; }
+  void run();
+  
   const std::filesystem::path getName() const { return m_name; }
 };
 

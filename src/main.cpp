@@ -455,5 +455,6 @@ int main() {
     folder_merger.getName()
   };
   folder_merger.addToExcludeList(excludes);
-  folder_merger.getDirectoryEntries();
+  folder_merger.run();
+  // folder_merger.getDirectoryEntries();
 }
