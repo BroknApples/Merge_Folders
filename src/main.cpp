@@ -1,3 +1,18 @@
+/*
+*
+*
+*
+*
+*
+* OLD VERSION
+*
+*
+*
+*
+*
+*/
+
+/*
 #include <iostream>
 #include <cstdio>
 #include <filesystem>
@@ -24,6 +39,7 @@ int main() {
   fs::path curr_directory = fs::current_path();
   const std::string kProgramFilename = "Merge_Folders.exe";
   const std::string kDesktopINI = "desktop.ini";
+  // literally no reason for this var, never used don't include in new version
   const int kProgramFilenameLength = kProgramFilename.length();
 
   std::vector<fs::path> files;
@@ -107,7 +123,7 @@ int main() {
   returns: boolean value
 
   checks if the string meets all conditions
-*/
+*/ /*
 bool IsProperFormat(const std::string& str, const int max_length) {
   if (str[0] == '/' && str.length() == 1) return true;
 
@@ -167,7 +183,7 @@ bool IsProperFormat(const std::string& str, const int max_length) {
 
   Lists all folders in the directory and prompts the user
   the order they wish to combine them in
-*/
+*/ /*
 std::vector<fs::path> PrintAndChangeOrder(std::vector<fs::path>& files) {
   // Prompt user for order of files
   std::string order = "";
@@ -219,7 +235,7 @@ std::vector<fs::path> PrintAndChangeOrder(std::vector<fs::path>& files) {
   returns: true/false of its success
 
   creates a backup of the folders used
-*/
+*/ /*
 bool CreateBackup(std::vector<fs::path>& ordering_list, fs::path& curr_directory) {
   // Check if folder with name already exists
   std::string backup_name = "Backup";
@@ -269,7 +285,7 @@ bool CreateBackup(std::vector<fs::path>& ordering_list, fs::path& curr_directory
   returns: string containing name of idx file
 
   Get name of index file
-*/
+*/ /*
 std::string GetIndexName(fs::path curr_directory) {
   // Prompt user for filename of inddex file, if and only if there is already one with deafult name
   bool named = false;
@@ -301,7 +317,7 @@ std::string GetIndexName(fs::path curr_directory) {
   returns: void
 
   print to indexing file
-*/
+*/ /*
 void AddToIndexFile(fs::path folder, std::string idx_filename, std::string new_filename, int folder_idx) {
   std::ofstream ofStream;
   
@@ -326,7 +342,7 @@ void AddToIndexFile(fs::path folder, std::string idx_filename, std::string new_f
 
   takes a list containing the order of files to combine and
   creates a folder that contains the combined files
-*/
+*/ /*
 bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_directory, std::string idx_filename) {
   const int kListSize = ordering_list.size();
   std::string destination_folder = ordering_list[0].string();
@@ -409,4 +425,35 @@ bool CombineAndRename(std::vector<fs::path>& ordering_list, fs::path curr_direct
   }
 
   return true;
+}
+*/
+
+/*
+*
+*
+*
+*
+*
+* NEW VERSION
+*
+*
+*
+*
+*
+*/
+
+#include <array>
+#include <filesystem>
+
+#include "folder_merger.hpp"
+#include "constants.hpp"
+
+int main() {
+  FolderMerger folder_merger(std::filesystem::current_path());
+  std::array<std::filesystem::path, EXCLUDE_SIZE> excludes = {
+    "desktop.ini",
+    folder_merger.getName()
+  };
+  folder_merger.addToExcludeList(excludes);
+  folder_merger.getDirectoryEntries();
 }
