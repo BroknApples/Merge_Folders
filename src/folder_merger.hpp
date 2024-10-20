@@ -7,10 +7,14 @@
 #include <filesystem>
 #include <string_view>
 
-constexpr std::string QUIT_FLAG = "-q";
-
 class FolderMerger {
  private:
+ // flags
+  std::string QUIT_FLAG = "-q";
+  std::string NO_BACKUP_FLAG = "-b";
+  std::string NO_INDEX_FLAG = "-i";
+  std::string NO_BACKUP_OR_INDEX_FLAG = "-c";
+
   // vars
   std::unordered_map<std::filesystem::path, int> m_exclude_list; // List of filenames to exclude
   std::filesystem::path m_main_directory; // Path to the main directory
@@ -24,13 +28,15 @@ class FolderMerger {
  
   // General use
   std::vector<std::filesystem::path> getDirectoryEntries(std::filesystem::path directory);
-  void printEntries(std::filesystem::path& curr_directory);
+  void printEntries(std::vector<std::filesystem::path>& directory);
 
-  // For Backups and Indexing
+  // Main working functions
+  std::vector<std::filesystem::path> getOrderingList(std::vector<std::filesystem::path>& entries);
+
   bool createBackup(std::vector<std::filesystem::path>& ordering_list, std::filesystem::path& curr_directory);
-  bool appendIndex(std::string_view str);
-
   void getValidBackupPath();
+
+  bool appendIndex(std::string_view str);
   void getValidIndexPath();
 
  public:
@@ -38,7 +44,7 @@ class FolderMerger {
 
   const std::filesystem::path getName() const { return m_name; }
   void getCustomExcludes();
-  void addToExcludeList(std::vector<std::filesystem::path>& exclude_list);
+  void addToExcludeList(const std::vector<std::filesystem::path>& exclude_list);
   void run();
 };
 
