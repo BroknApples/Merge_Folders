@@ -18,7 +18,7 @@ txt file showing how to use included in release folder
 1. Clone project to machine
 2. Compile main.cpp with (must be c++17 or above)
 ```console
-g++ src/*.cpp -o FolderMerger.exe
+g++ src/*.cpp -o fmerge.exe
 ```
 
 **From CMake**
@@ -28,7 +28,7 @@ g++ src/*.cpp -o FolderMerger.exe
 1. Place FolderMerger.exe in a directory | TODO: enter image here that shows where to put file
 2. Double click to run file OR open folder in terminal and run this command:
 ```console
-./FolderMerger
+./fmerge
 ```
 
 ## License
