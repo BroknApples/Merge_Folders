@@ -1,6 +1,3 @@
-
-
-
 # Folder Merger
 ## Overview
 Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or other s
@@ -16,18 +13,21 @@ txt file showing how to use included in release folder
 1. Download latest release
 2. Extract folder
 
-**From source files**
+**From source compile**
 1. Clone project to machine
 2. Compile main.cpp with (must be c++17 or above)
 ```console
-(TODO: enter command here)
+g++ src/*.cpp -o FolderMerger.exe
 ```
+
+**From CMake**
+1. TODO: finish steps
 
 ### Running program
 1. Place FolderMerger.exe in a directory | TODO: enter image here that shows where to put file
-2. Double click file OR open folder in terminal and run this command:
+2. Double click to run file OR open folder in terminal and run this command:
 ```console
-FolderMerger.exe
+./FolderMerger
 ```
 
 ## License

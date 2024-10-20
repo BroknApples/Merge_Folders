@@ -39,6 +39,7 @@ int main() {
   fs::path curr_directory = fs::current_path();
   const std::string kProgramFilename = "Merge_Folders.exe";
   const std::string kDesktopINI = "desktop.ini";
+
   // literally no reason for this var, never used don't include in new version
   const int kProgramFilenameLength = kProgramFilename.length();
 
@@ -457,8 +458,8 @@ int main() {
     "desktop.ini",
     folder_merger.getName()
   };
-
+  folder_merger.getCustomExcludes();
   folder_merger.addToExcludeList(excludes);
+
   folder_merger.run();
-  // folder_merger.getDirectoryEntries();
 }
