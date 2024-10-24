@@ -1,5 +1,6 @@
 {
   "files.associations": {
+    "*.embeddedhtml": "html",
     "algorithm": "cpp",
     "atomic": "cpp",
     "bit": "cpp",
@@ -75,7 +76,11 @@
     "numbers": "cpp",
     "span": "cpp",
     "text_encoding": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "expected": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "xtree": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "C:/msys64/mingw64/bin/g++.exe",

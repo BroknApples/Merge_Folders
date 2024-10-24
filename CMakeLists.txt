@@ -1,2 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-# todo: finish this later
+
+project(fmerge LANGUAGES CXX)
+
+add_executable(fmerge src/main.cpp src/folder_merger.cpp)

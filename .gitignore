@@ -1,4 +1,4 @@
 .vscode/
 release/
 release.zip
-fmerge.exe
+build/
