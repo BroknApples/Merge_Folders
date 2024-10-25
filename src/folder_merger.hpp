@@ -13,12 +13,15 @@
 class FolderMerger {
  private:
   // flags
-  const std::string QUIT_FLAG = "-q";
-  const std::string NO_BACKUP_FLAG = "-b";
-  const std::string NO_INDEX_FLAG = "-i";
-  const std::string NO_BACKUP_OR_INDEX_FLAG = "-c";
-  const std::filesystem::path DEFAULT_BACKUP_PATH = "Backup";
-  const std::filesystem::path DEFAULT_INDEX_PATH = "Index";
+  const std::string M_QUIT_FLAG = "-q";
+  const std::string M_NO_INDEX_FLAG = "-b";
+  const std::string M_NO_BACKUP_FLAG = "-i";
+  const std::string M_NO_BACKUP_OR_INDEX_FLAG = "-c";
+
+  // const paths
+  const std::filesystem::path M_DEFAULT_BACKUP_PATH = "Backup";
+  const std::filesystem::path M_DEFAULT_INDEX_PATH = "Index";
+  const std::filesystem::path M_TEMP_FOLDER = "_____[TempMergeFolder]_____";
 
   // vars
   std::unordered_map<std::filesystem::path, int> m_exclude_list; // List of filenames to exclude
@@ -44,12 +47,14 @@ class FolderMerger {
 
   std::filesystem::path getValidIndexPath();
 
-  bool merge(std::vector<std::filesystem::path>& ordering_list, std::filesystem::path& index_file = std::filesystem::path(""));
+  bool merge(std::vector<std::filesystem::path>& ordering_list, std::filesystem::path& index_file);
+  void confirmMerge(std::vector<std::filesystem::path>& ordering_list, std::filesystem::path& src_path, std::filesystem::path& dest_path);
+  void undoMerge(std::filesystem::path& temp_folder_path);
 
  public:
-  FolderMerger(std::filesystem::path main_directory);
+  FolderMerger(std::filesystem::path main_directory, std::filesystem::path program_name);
 
-  const std::filesystem::path getName() const { return m_name; }
+  const std::filesystem::path& getName() const { return m_name; }
   void getCustomExcludes();
   void addToExcludeList(const std::vector<std::filesystem::path>& exclude_list);
   void run();
