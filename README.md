@@ -8,7 +8,7 @@ Merges multiple folders into one folder containing numbered files. Useful for im
 ![ExcludingFiles](example_images/excluding_files.png)
 ### Ordering Files
 ![Ordering](example_images/ordering.png)
-### Backups
+### Backups & Skipping Nested Folders
 ![Backups](example_images/backups.png)
 ### Indexing
 ![Indexing](example_images/indexing.png)
