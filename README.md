@@ -51,9 +51,9 @@ cmake --build build
 ### Running program
 1. Place fmerge.exe in a directory
 ![WhereToPut](example_images/where_to_put.png)
-2. Double click file OR run open folder in terminal and run this command:
+2. Double click 'fmerge.exe' OR run open folder in terminal and run this command:
 ```console
-FolderMerger.exe
+fmerge.exe
 ```
 3. Follow instructions written in program.
 
