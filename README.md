@@ -1,6 +1,6 @@
 # Folder Merger
 ## Overview
-Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or other s
+Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or combining a multitude of numbered textbook page folder into one folder.
 ## Features
 ### Basic Use
 ![BasicUse](example_images/overview.png)
@@ -19,8 +19,8 @@ Merges multiple folders into one folder containing numbered files. Useful for im
 ## How to Use
 txt file showing how to use included in release folder
 
-1. Place File in a directory
-2. Run the file
+1. Place 'fmerge.exe' in a directory
+2. Run 'fmerge.exe'
 3. Follow instructions...
 4. and voila! Your files are now merged in ascending order.
 
@@ -31,7 +31,7 @@ txt file showing how to use included in release folder
 
 **From source files**
 1. Clone project to machine
-2. Compile main.cpp with (must be c++17 or above)
+2. Compile main.cpp (must be c++17 or above)
 ```console
 g++ src/main.cpp src/folder_merger.cpp -o fmerge
 ```
@@ -45,8 +45,8 @@ cmake ../
 cd ..
 cmake --build build
 ```
-* Using GCC, exe file will be located in build/
-* Using MSVC, exe file will be located in build/Debug/
+* Using GCC: exe file will be located in build/
+* Using MSVC: exe file will be located in build/Debug/
 
 ### Running program
 1. Place fmerge.exe in a directory
