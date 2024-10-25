@@ -3,9 +3,9 @@
 Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or other s
 ## Features
 ![Overview](example_images/overview.png)
-![ExcludingFiles](example_images/overview.png)
-![Ordering](example_images/overview.png)
-![Backups](example_images/overview.png)
+![ExcludingFiles](example_images/excluding_files.png)
+![Ordering](example_images/ordering.png)
+![Backups](example_images/backups.png)
 ![Indexing](example_images/indexing.png)
 ![Output](example_images/output.png)
 <!--- ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true) = Add Images With This Method--->
