@@ -5,13 +5,13 @@
 ******************************************************************************/ 
 
 /**
- * @brief Check if a file is a valid file to add to an ordering_list
+ * @brief Check if a file is a valid file to use in an ordering_list
  *
  * @param file file to check
  * 
  * @return true if success ; false if error
  */
-bool FolderMerger::isValidEntry(std::filesystem::path file) {
+bool FolderMerger::isValidOrderedListEntry(std::filesystem::path file) {
   // if file is in the exclude list, return false
   if (m_exclude_list.find(file.filename()) != m_exclude_list.end()) {
     std::cout << file.filename() << " is an excluded filename. Skipping.\n";
@@ -129,15 +129,12 @@ std::vector<std::filesystem::path> FolderMerger::getOrderingList(std::vector<std
     std::cout << "Enter the order of files using spaces(e.g. '0 1 6 2 5 3 4');\n"
               << "Press 'ENTER' if the order is correct and all files should be included: "
               << std::endl;
+              
+    std::cout << "ENTER: ";
     std::cin >> std::noskipws;
     std::getline(std::cin, input);
   } while (!isProperFormat(input, (kLength - 1)));
   
-  // If string is empty, return original list
-  if (input == "") {
-    return entries;
-  }
-
 
   // Create ordering list
   std::vector<std::filesystem::path> ordering_list;
@@ -145,28 +142,40 @@ std::vector<std::filesystem::path> FolderMerger::getOrderingList(std::vector<std
   int num_elements = 0;
 
   const int kListSize = input.length();
-  int val = 0;
-  for (int i = 0; i < kListSize; i++) {
-    if (input[i] == ' ') {
-      continue;
+  
+  
+  if (input == "") { // if string is empty return original list minus the excluded items
+    for (auto& file : entries) {
+      if (isValidOrderedListEntry(file)) {
+        ordering_list.push_back(file);
+      }
+    }
+  }
+  else { // if string is not empty add only the numbered items
+    int val = 0;
+    for (int i = 0; i < kListSize; i++) {
+      if (input[i] == ' ') {
+        continue;
+      }
+
+      val *= 10;
+      val += input[i] - '0';
+
+      // multi-digit numbers
+      if (isdigit(input[i + 1])) {
+        continue;
+      }
+
+      if (isValidOrderedListEntry(entries[val])) {
+        ordering_list.push_back(entries[val]);
+      }
+      num_elements++;
+      val = 0;
     }
 
-    val *= 10;
-    val += input[i] - '0';
-
-    // multi-digit numbers
-    if (isdigit(input[i + 1])) {
-      continue;
-    }
-
-    if (isValidEntry(entries[val])) {
-      ordering_list.push_back(entries[val]);
-    }
-    num_elements++;
-    val = 0;
+    ordering_list.resize(num_elements); // resize list to correct size
   }
 
-  ordering_list.resize(num_elements); // resize list to correct size
   return ordering_list;
 }
 
@@ -181,9 +190,11 @@ std::vector<std::filesystem::path> FolderMerger::getOrderingList(std::vector<std
 bool FolderMerger::isValidPath(std::filesystem::path path, bool check_directory) {
   if (std::filesystem::exists(path)) {
     if (!check_directory) {
+      std::cout << "Path: " << path.filename() << " already exists." << std::endl;
       return false;
     }
     else if (check_directory && std::filesystem::is_directory(path)) {
+      std::cout << "Path: " << path.filename() << " already exists." << std::endl;
       return false;
     }
   }
@@ -225,8 +236,9 @@ bool FolderMerger::createBackup(std::vector<std::filesystem::path>& ordering_lis
 std::filesystem::path FolderMerger::getValidBackupPath() {
   std::string input;
   do {
-    std::cout << "Enter a valid backup folder name: ";
-    
+    std::cout << "Enter a valid backup folder name: " << std::endl;
+
+    std::cout << "ENTER: ";
     std::cin >> std::noskipws;
     std::getline(std::cin, input);
     // check if file exists, or if there is not a directory with that name
@@ -236,44 +248,134 @@ std::filesystem::path FolderMerger::getValidBackupPath() {
 }
 
 /**
- * @brief create a file that will contain the index of all of the merged folder's contents BUT do not add anything to it yet
- * 
- * @return true if success ; false if error
+ * @brief Get a valid name for a index directory
+ *
+ * @return std::filesystem::path which holds the valid index path name
  */
-bool FolderMerger::createIndex() {
-  std::filesystem::path backup_path = DEFAULT_BACKUP_PATH;
-
-  // Check if path is a valid backup directory name
-  if (!isValidPath(backup_path, true)) {
-    backup_path = getValidBackupPath();
+std::filesystem::path FolderMerger::getValidIndexPath() {
+  // if the default path is valid, simply return it
+  if (isValidPath(DEFAULT_INDEX_PATH, true)) {
+    return DEFAULT_INDEX_PATH;
   }
 
-  std::filesystem::create_directory(backup_path);
-
-  return true;
-}
-
-bool FolderMerger::appendIndex(std::string_view str) {
-  // create index some time earlier,
-  return true;
-}
-
-/**
- * @brief Get a valid name for a backup directory
- *
- * @return std::filesystem::path which holds the valid backup path name
- */
-std::filesystem::path FolderMerger::getValidBackupPath() {
   std::string input;
   do {
     std::cout << "Enter a valid backup folder name: ";
     
+    std::cout << "ENTER: ";
     std::cin >> std::noskipws;
     std::getline(std::cin, input);
     // check if file exists, or if there is not a directory with that name
   } while (!isValidPath(input, true) && input != "");
 
   return input;
+}
+
+/**
+ * @brief Merge all files in the proper order with the correct name
+ * 
+ * @param ordering_list list containing directories to be merged together
+ * @param index_file path to index file that contains the start pages for the merged folders DEFAULT = "" ~ empty
+ * 
+ * @return true if succes ; false if error
+ */
+bool FolderMerger::merge(std::vector<std::filesystem::path>& ordering_list, std::filesystem::path& index_file = std::filesystem::path("")) {
+  std::filesystem::path destination_folder = ordering_list[0];
+
+  // get length to find smallest prefix of 0's to use
+  int length = 0;
+  for (const auto& folder : ordering_list) {
+    for (const auto& file : std::filesystem::directory_iterator(folder)) {
+      if (std::filesystem::is_directory(file)) {
+        std::cout << "Folder detected in " << folder << ", would you like to skip or quit(Enter: "
+                  << QUIT_FLAG << " to quit or enter: 'any key' to skip)." << std::endl;
+        
+        std::string input = "";
+        std::cout << "ENTER: ";
+        std::getline(std::cin, input);
+
+        if (input == QUIT_FLAG) {
+          return false;
+        }
+      }
+      else if (m_exclude_list.find(file) != m_exclude_list.end()) {
+        std::cout << file.path().filename() << " is not a valid entry. Skipping.\n";
+      }
+
+      length++;
+    }
+  }  
+
+  // find how many leading zeroes there will be, e.g. 001.png or 000001.pdf or 1.txt
+  int leading_zeroes = 0;
+  while(length > 9) {
+    length /= 10;
+    leading_zeroes++;
+  }
+
+  int idx_num = 1;
+  int folder_idx = 0;
+  int ten_multiple = 10;
+  for (const auto& curr_folder : ordering_list) {
+    bool first_loop = true;
+    for (const auto& file : std::filesystem::directory_iterator(curr_folder)) {
+      if (m_exclude_list.find(file) != m_exclude_list.end()) {
+        std::cout << file.path().filename() << " is not a valid entry. Skipping.\n";
+      }
+
+      // Remove a leading zero
+      if (idx_num % ten_multiple == 0) { // divisible by some multiple of ten
+        ten_multiple *= 10;
+        leading_zeroes--;
+      }
+
+      // Add zeroes to string
+      std::string temp_zeroes = "";
+      for (int i = 0; i < leading_zeroes; i++) {
+        temp_zeroes += '0';
+      }
+      std::filesystem::path zeroes(temp_zeroes);
+      std::filesystem::path filename(std::to_string(idx_num) + file.path().extension().string()); // filename e.g. 001.txt
+      std::filesystem::path new_file = (destination_folder / zeroes / filename);
+
+      idx_num++;
+
+
+
+
+      // TODO: appendIndex in this function and delete folder
+
+
+
+
+
+      if (first_loop) {
+        // Add to index file
+        appendIndex(curr_folder, idx_filename, (zeroes + std::to_string(idx_num - 1)), folder_idx);
+        first_loop = false;
+      }
+
+      // print and rename
+      std::cout << "Old filename: " << file.path().filename() << "\nNew filename: " << new_file.filename() << "\n";
+      std::filesystem::rename(file.path(), new_file);
+    }
+
+    // Delete empty folder if its not the first in the ordering_list
+    if (curr_folder.filename() != ordering_list[0].filename()) {
+      std::error_code error_code;
+      if (!std::filesystem::remove(curr_folder, error_code)) {
+        std::cout << error_code.message() << std::endl;
+      } else {
+        std::cout << "Deleted folder:  " << curr_folder.filename() << "\n";
+      }
+    }
+
+    std::cout << std::endl;
+
+    folder_idx++;
+  }
+
+  return true;
 }
 
 /******************************************************************************
@@ -300,6 +402,8 @@ void FolderMerger::getCustomExcludes() {
     if ((input != QUIT_FLAG) && (input != "")) {
       m_exclude_list[input]++;
     }
+
+    std::cout << "ENTER: ";
     std::cin >> std::noskipws;
     std::getline(std::cin, input);
   }
@@ -332,9 +436,10 @@ void FolderMerger::run() {
     printEntries(ordering_list);
     std::cout << "Press 'any key' and press 'ENTER' to go back, or enter "
               << "nothing and press 'ENTER' if this is the correct order: " << std::endl;
+
+    std::cout << "ENTER: ";
     std::string input = "";
-    std::cin >> input;
-    std::cin.ignore();
+    std::getline(std::cin, input);
     
     if (input != "") {
       loop = true;
@@ -349,42 +454,48 @@ void FolderMerger::run() {
     std::cout << "Enter a merge method(Enter only ONE):\n"
               << "FLAGNAME  |  RESULT\n"
               << "'ENTER':     Create a Backup and an Index\n"
-              << "'-b':        Do not create a Backup, but create an Index\n"
-              << "'-i':        Do not create a Index, but create an Backup\n"
-              << "'-c':        Do not create a Backup or an Index\n"
+              << "'-b':        Do NOT create a Backup, but DO create an Index\n"
+              << "'-i':        Do NOT create an Index, but DO create a Backup\n"
+              << "'-c':        Do NOT create a Backup and do NOT create an Index\n"
               << "'-q':        Quit Program\n"
               << std::endl;
 
+    std::cout << "ENTER: ";
     std::string merge_method = "";
-    std::cin >> merge_method;
+    std::getline(std::cin, merge_method);
 
     std::remove_if(merge_method.begin(), merge_method.end(), isspace);
 
     loop = false;
     switch(merge_method[1]) {
-      case '\0': // Create Backup and Index
+      case '\0':  { // Create Backup and Index
         createBackup(ordering_list);
-        createIndex();
+        std::filesystem::path index_path = getValidIndexPath();
+        merge(ordering_list, index_path);
         break;
-
-      case 'b': // No Backup
-        createIndex();
+      }
+      case 'b': { // No Backup
+        std::filesystem::path index_path = getValidIndexPath();
+        merge(ordering_list, index_path);
         break;
-
-      case 'i': // No Index
+      }
+      case 'i': { // No Index
         createBackup(ordering_list);
+        merge(ordering_list);
         break;
-
-      case 'c': // No Backup or Index
+      }
+      case 'c': { // No Backup or Index
+      merge(ordering_list);
         break;
-
-      case 'q': // Quit Program
-        std::cout << "Quitting program." << std::endl;
+      }
+      case 'q': { // Quit program
+        std::cout << "Closing program." << std::endl;
         return;
-
-      default:
+      }
+      default: { // Invalid input
         std::cout << "ERROR: incorrect entry: " << merge_method << std::endl;
         loop = true;
+      }
     }
   } while (loop);
 }

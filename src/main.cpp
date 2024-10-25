@@ -456,6 +456,7 @@ int main() {
   std::vector<std::filesystem::path> excludes(EXCLUDE_SIZE);
   excludes = {
     "desktop.ini",
+    ".git",
     folder_merger.getName()
   };
   folder_merger.getCustomExcludes();

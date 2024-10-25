@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <filesystem>
 #include <algorithm>
+#include <fstream>
 
 class FolderMerger {
  private:
@@ -27,7 +28,7 @@ class FolderMerger {
   // funcs
 
   // Check user input
-  bool isValidEntry(std::filesystem::path entry);
+  bool isValidOrderedListEntry(std::filesystem::path entry);
   bool isProperFormat(std::string_view str, const int max_length);
  
   // General use
@@ -41,8 +42,9 @@ class FolderMerger {
   bool createBackup(std::vector<std::filesystem::path>& ordering_list);
   std::filesystem::path getValidBackupPath();
 
-  bool createIndex();
-  bool appendIndex(std::string_view str);
+  std::filesystem::path getValidIndexPath();
+
+  bool merge(std::vector<std::filesystem::path>& ordering_list, std::filesystem::path& index_file = std::filesystem::path(""));
 
  public:
   FolderMerger(std::filesystem::path main_directory);
