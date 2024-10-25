@@ -2,17 +2,17 @@
 ## Overview
 Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or combining a multitude of numbered textbook page folder into one folder.
 ## Features
-**Basic Use**
+### Basic Use**
 ![BasicUse](example_images/overview.png)
-**Excluding Files**
+### Excluding Files
 ![ExcludingFiles](example_images/excluding_files.png)
-#**Ordering Files**
+### Ordering Files
 ![Ordering](example_images/ordering.png)
-**Backups & Skipping Nested Folders**
+### Backups & Skipping Nested Folders
 ![Backups](example_images/backups.png)
-**Indexing**
+### Indexing
 ![Indexing](example_images/indexing.png)
-**Output**
+### Output
 ![Output](example_images/output.png)
 <!--- ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true) = Add Images With This Method--->
 
