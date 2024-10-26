@@ -24,7 +24,7 @@ txt file showing how to use included in release folder
 3. Follow instructions...
 4. and voila! Your files are now merged in ascending order.
 
-### Download
+### Download & Compiling
 **From zip**
 1. Download latest release
 2. Extract folder
