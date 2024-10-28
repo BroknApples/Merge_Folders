@@ -24,19 +24,20 @@ txt file showing how to use included in release folder
 3. Follow instructions...
 4. and voila! Your files are now merged in ascending order.
 
-### Download
+### Download & Compiling
 **From zip**
 1. Download latest release
 2. Extract folder
 
-**From source files**
+**From GCC Using Source Files**
 1. Clone project to machine
 2. Compile main.cpp (must be c++17 or above)
 ```console
 g++ src/main.cpp src/folder_merger.cpp -o fmerge
 ```
 
-**From CMake**
+**From CMake Using Source Files**
+*Basic CMakeLists.txt Provided in source files*
 1. Run these commands
 ```console
 mkdir build
@@ -45,8 +46,8 @@ cmake ../
 cd ..
 cmake --build build
 ```
-* Using GCC: exe file will be located in build/
-* Using MSVC: exe file will be located in build/Debug/
+* Using GCC CMake: exe file will be located in build/
+* Using MSVC CMake: exe file will be located in build/Debug/
 
 ### Running program
 1. Place fmerge.exe in a directory
