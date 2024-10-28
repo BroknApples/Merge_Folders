@@ -2,6 +2,7 @@
 release/
 release.zip
 release.tar
+release.tar.gz
 release.7z
 build/
 fmerge.exe
