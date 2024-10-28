@@ -110,7 +110,7 @@ std::vector<std::filesystem::path> FolderMerger::getDirectoryEntries(std::filesy
  */
 void FolderMerger::printEntries(std::vector<std::filesystem::path>& directory) {
   for (int i = 0; i < directory.size(); i++) {
-    std::cout << i << " - " << directory[i] << "\n";
+    std::cout << i << " - " << directory[i].filename() << "\n";
   }
   std::cout << std::endl;
 }
