@@ -3,17 +3,17 @@
 Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or combining a multitude of numbered textbook page folder into one folder.
 ## Features
 ### Basic Use**
-![BasicUse](example_images/overview.png)
+![BasicUse](bin/example_images/overview.png)
 ### Excluding Files
-![ExcludingFiles](example_images/excluding_files.png)
+![ExcludingFiles](bin/example_images/excluding_files.png)
 ### Ordering Files
-![Ordering](example_images/ordering.png)
+![Ordering](bin/example_images/ordering.png)
 ### Backups & Skipping Nested Folders
-![Backups](example_images/backups.png)
+![Backups](bin/example_images/backups.png)
 ### Indexing
-![Indexing](example_images/indexing.png)
+![Indexing](bin/example_images/indexing.png)
 ### Output
-![Output](example_images/output.png)
+![Output](bin/example_images/output.png)
 <!--- ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true) = Add Images With This Method--->
 
 ## How to Use
@@ -51,7 +51,7 @@ cmake --build build
 
 ### Running program
 1. Place fmerge.exe in a directory
-![WhereToPut](example_images/where_to_put.png)
+![WhereToPut](bin/example_images/where_to_put.png)
 2. Double click 'fmerge.exe' OR run open folder in terminal and run this command:
 ```console
 fmerge.exe

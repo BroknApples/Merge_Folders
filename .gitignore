@@ -1,8 +1,4 @@
 .vscode/
-release/
-release.zip
-release.tar
-release.tar.gz
-release.7z
+bin/Releases
 build/
 fmerge.exe
