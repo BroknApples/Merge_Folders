@@ -330,8 +330,9 @@ bool FolderMerger::merge(std::vector<std::filesystem::path>& ordering_list, std:
     std::cout << folder_idx << " - " << folder.stem().string() << ": "; // print header
     for (const auto& file : std::filesystem::directory_iterator(folder)) {
       // Check if this file is in the exlcude list
-      if (m_exclude_list.find(file) != m_exclude_list.end()) {
+      if (m_exclude_list.find(file.path().filename()) != m_exclude_list.end()) {
         std::cout << file.path().filename() << " is not a valid entry. Skipping.\n";
+        continue;
       }
 
       // Remove a leading zero
