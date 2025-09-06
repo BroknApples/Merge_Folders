@@ -1,4 +1,4 @@
-# DirMerge
+# VSFM (Very Simply File Merger)
 ## Overview
 Merges multiple folders into one folder containing numbered files. Useful for image slideshow downloads or combining a multitude of numbered textbook page folder into one folder.
 ## Features

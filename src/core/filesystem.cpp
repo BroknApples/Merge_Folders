@@ -1,4 +1,4 @@
-#include "directory_manager.hpp"
+#include "filesystem.hpp"
 
 namespace fs = std::filesystem;
 
@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 /************************ Private ************************/
 /*********************************************************/
 
-std::vector<fs::path> DirectoryManager::getDirectoryEntries(const fs::path& dir_path) {
+std::vector<fs::path> Filesystem::getDirectoryEntries(const fs::path& dir_path) {
   // Return empty vector if the path is NOT a directory
   if (!fs::is_directory(dir_path)) {
     return {};

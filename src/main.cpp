@@ -7,15 +7,12 @@
  * 
  */
 
-#include "folder_merger.hpp" /** TODO: Switch to a GUI application later */
-
+#include <iostream>
 
 /**
  * @brief Sets general parameters and starts the program
  */
 int main() {
-
-
 
 
 
