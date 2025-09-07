@@ -1,7 +1,12 @@
+#ifndef THREADS_HPP
+#define THREADS_HPP
+
+
 #include <iostream>
 #include <thread>
 #include <future>
 #include <type_traits>
+
 
 class ThreadRunner {
   public:
@@ -32,3 +37,5 @@ class ThreadRunner {
       }
     }
 };
+
+#endif // THREADS_HPP

@@ -5,7 +5,7 @@
 #include <chrono>
 #include <optional>
 
-#include "logger.hpp"
+#include "utils.hpp"
 
 
 /**
@@ -31,7 +31,7 @@ class IntervalTimer {
     bool start() {
       // Do not allow the timer to be started without being reset
       if (_start.has_value()) {
-        Logger::println("Please reset the timer before starting it.");
+        println("Please reset the timer before starting it.");
         return false;
       }
 
@@ -47,7 +47,7 @@ class IntervalTimer {
     bool end() {
       // Do not allow the timer to be started without being reset
       if (_end.has_value()) {
-        Logger::println("Please reset the timer before ending.");
+        println("Please reset the timer before ending.");
         return false;
       }
 
@@ -77,13 +77,12 @@ class IntervalTimer {
     double diff(Duration) const {
       // In order to get the difference, the timer must have started and ended
       if (!_start.has_value() || !_end.has_value()) {
-        Logger::println("Must start() and end() the timer before getting the time difference.");
+        println("Must start() and end() the timer before getting the time difference.");
         return 0.0;
       }
 
       return std::chrono::duration<double, typename Duration::period>(*_end - *_start).count();
     }
-
 
     /** Helper methods for seconds, milliseconds, and microseconds */
 
