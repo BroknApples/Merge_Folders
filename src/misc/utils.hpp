@@ -119,10 +119,13 @@ println(std::ostream& os, const T&) {
  */
 template <typename T, typename... Args>
 void println(std::ostream& os, const T& first, const Args&... args) {
-  println(os, first);
+  print(os, first);
   if constexpr (sizeof...(args) > 0) {
-    println(os, args...);
+    print(os, args...);
   }
+
+  // Empty println for a newline at the end.
+  println(os, "");
 }
 
 

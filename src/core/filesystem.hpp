@@ -8,7 +8,12 @@
 #include <stack>
 #include <cassert>
 
-#include "../misc/config.hpp"
+#ifdef _WIN32
+  #include <windows.h>
+  #include <cwchar>
+#endif // _WIN32
+
+#include "config.hpp"
 
 
 namespace fs = std::filesystem;
@@ -30,6 +35,12 @@ class Filesystem {
     };
 
   private:
+    /** Root of the filesystem */
+    inline static const std::string _SYS_ROOT = "/";
+
+    /** Alternate root of the filesystem */
+    inline static const std::string _SYS_ROOT_ALT = "\\";
+
     static std::stack<fs::path> _history;
     static fs::path _current_dir;
     static std::pair<ClipboardActionType, std::vector<fs::path>> _clipboard;
@@ -84,6 +95,13 @@ class Filesystem {
 
 
     /**
+     * @brief Get the path to the current executable
+     * @returns fs::path: Path to the executable on the filesystem.
+     */
+    static fs::path getExecutableDirectoryPath();
+
+
+    /**
      * @brief Go to a new directory.
      * @param dir_path: Path to the new directory. Can be relative or absolute
      * @returns bool: True/False of success.
@@ -103,7 +121,7 @@ class Filesystem {
      * @param dir_path: Path to the directory to get the files from. Can be relative or absolute
      * @returns std:vector<fs::path>: List of files.
      */
-    static std::vector<fs::path> getFilesInDirectory(fs::path dir_path);
+    static std::vector<fs::path> getFilesInDirectory(const std::string& dir_path);
 
     
     /**
@@ -122,7 +140,7 @@ class Filesystem {
      * @param dir_path: Path to the directory to get the files from. Can be relative or absolute
      * @returns std:vector<fs::path>: List of files.
      */
-    static std::vector<fs::path> getFilesInDirectoryRecursive(fs::path dir_path);
+    static std::vector<fs::path> getFilesInDirectoryRecursive(const std::string& dir_path);
 
 
     /***
@@ -134,7 +152,8 @@ class Filesystem {
 
 
     /**
-     * @brief Checks if a given file exists in the current directory.
+     * @brief Checks if a given file exists in the current directory. NOTE: Only
+     *        checks the immediate parent, not two-plus levels up
      * @param path: Filename to check existence of.
      * @returns bool: True/False of existence.
      */
@@ -142,7 +161,8 @@ class Filesystem {
 
 
     /**
-     * @brief Checks if a given file exists in a given directory.
+     * @brief Checks if a given file exists in a given directory. NOTE: Only
+     *        checks the immediate parent, not two-plus levels up
      * @param path: Filename to check existence of.
      * @param parent_dir_path: Path to the directory to scan. Can be relative or absolute.
      * @returns bool: True/False of existence.
@@ -151,19 +171,28 @@ class Filesystem {
 
 
     /**
-     * @brief Determines whether or not a path is an Absolute Path ("C:/", "D:/", etc.) OR a Relative Path ("dir1/file.txt", "text_doc.txt", etc.)
+     * @brief Determines whether or not a path is an Absolute Path ("C:/", "D:/", etc.)
      * @param path: std::filesystem::path to check.
-     * @returns bool: True if the path is absolute, otherwise false. NOTE: Always false if the path doesn't exist.
+     * @returns bool: True if the path is absolute, otherwise false.
      */
-    static bool isPathAbsolute(fs::path path);
+    static bool isPathAbsolute(const fs::path& path);
+
+
+    /**
+     * @brief Determines whether or not a path is a Relative Path ("dir1/file.txt", "text_doc.txt", etc.)
+     * @param path: std::filesystem::path to check.
+     * @returns bool: True if the path is relative, otherwise false.
+     */
+    static bool isPathRelative(const fs::path& path);
 
 
     /**
      * @brief Gets the full path given the relative path to a given/current directory.
      * @param path: std::filesystem::path to get the relative path of.
+     * @param parent_dir_path: Path to the parent directory of the path. Default is the current directory of the filesystem.
      * @returns fs::path: Full path.
      */
-    static fs::path getFullPathFromRelativePath(fs::path path);
+    static fs::path getAbsolutePathFromRelativePath(const fs::path& path, const fs::path& parent_dir_path = fs::path{});
 
 
     /**
@@ -215,6 +244,7 @@ class Filesystem {
      * @param path: Path to the file to rename.
      * @param new_name: New name of the file. Can be absolute or relative.
      * @returns bool: True/False of success.
+     * @throws TODO: Some error here if the file cannot be removed.
      */
     static bool rename(fs::path path, const std::string& new_name);
 
@@ -224,6 +254,7 @@ class Filesystem {
      * @param dir_path: Path to the directory to rename.
      * @param new_dirname: New name of the directory. Can be absolute or relative.
      * @returns bool: True/False of success.
+     * @throws TODO: Some error here if the file cannot be removed.
      */
     static bool renameDirectory(fs::path dir_path, const std::string& new_dirname);
 
@@ -233,6 +264,7 @@ class Filesystem {
      * @param file_path: Path to the file to rename.
      * @param new_filename: New name of the file. Can be absolute or relative.
      * @returns bool: True/False of success.
+     * @throws TODO: Some error here if the file cannot be removed.
      */
     static bool renameFile(fs::path file_path, const std::string& new_filename);
 
@@ -244,6 +276,7 @@ class Filesystem {
      * @param new_name: New name of the file. NOTE: Optional. Default will be the same name OR "original_name - Copy.extension"
      *                  if there already exists a file with that name in the destination.
      * @returns bool: True/False of success.
+     * @throws TODO: Some error here if the file cannot be removed.
      */
     static bool copy(fs::path src_path, fs::path dest_path, const std::string& new_name = "");
 
@@ -255,6 +288,7 @@ class Filesystem {
      * @param new_dirname: New name of the directory. NOTE: Optional. Default will be the same name OR "original_name - Copy"
      *                     if there already exists a directory with that name in the destination.
      * @returns bool: True/False of success.
+     * @throws TODO: Some error here if the file cannot be removed.
      */
     static bool copyDirectory(fs::path src_dir_path, fs::path dest_dir_path, const std::string& new_dirname = "");
 
@@ -266,8 +300,10 @@ class Filesystem {
      * @param new_filename: New name of the file. NOTE: Optional. Default will be the same name OR "original_name - Copy.extension"
      *                      if there already exists a file with that name in the destination.
      * @returns bool: True/False of success.
+     * @throws TODO: Some error here if the file cannot be removed.
      */
     static bool copyFile(fs::path src_file_path, fs::path dest_file_path, const std::string& new_filename = "");
 };
+
 
 #endif // FILESYSTEM_HPP

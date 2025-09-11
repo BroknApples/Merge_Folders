@@ -5,9 +5,8 @@
 #include <string>
 #include <fstream>
 
-#include "utils.hpp"
-#include "json_reader.hpp"
-#include "../thirdparty/json/single_include/nlohmann/json.hpp"
+#include "../misc/utils.hpp"
+#include "../misc/json_reader.hpp"
 
 
 /**
@@ -30,21 +29,28 @@ class Config {
 
 
       /******************************************
-      **************** Variables ****************
+      **************** Constants ****************
       ******************************************/
 
+      inline static const std::string SEPERATOR = ".";
 
+      /** Section: Window Settings */
       inline static const std::string WINDOW_SETTINGS_SECTION = "Window Settings";
-      inline static const std::string WINDOW_HEIGHT                 = WINDOW_SETTINGS_SECTION + ".Window Height";
-      inline static const std::string WINDOW_WIDTH                  = WINDOW_SETTINGS_SECTION + ".Window Width";
-      inline static const std::string STYLESHEET_PATH               = WINDOW_SETTINGS_SECTION + ".Stylesheet Path";
+      inline static const std::string WINDOW_HEIGHT                 = WINDOW_SETTINGS_SECTION + SEPERATOR + "Window Height";
+      inline static const std::string WINDOW_WIDTH                  = WINDOW_SETTINGS_SECTION + SEPERATOR + "Window Width";
+      inline static const std::string STYLESHEET_PATH               = WINDOW_SETTINGS_SECTION + SEPERATOR + "Stylesheet Path";
+
+
+      /** Section: Filesystem Settings */
+      inline static const std::string FILESYSTEM_SETTINGS_SECTION = "Filesystem Settings";
+      inline static const std::string DEFAULT_DIRECTORY             = FILESYSTEM_SETTINGS_SECTION + SEPERATOR + "Default Directory";
     };
   
 
   private:
 
     /** Object containing the json data */
-    static JsonReader _config_json;
+    inline static JsonReader _config_json{};
 
       
     /** Constants */
@@ -63,11 +69,16 @@ class Config {
      */
     static void init() {
       // Load json data
-      _config_json.loadFromFile(_CONFIG_FILE_PATH);
+      if (DEBUG) {
+        // NOTE: You must personally change the path to the correct file.
+        // Using CMake, my executable is simply one directory too deep, so
+        // I go back one to read the config path.
+        _config_json.loadFromFile("../" + _CONFIG_FILE_PATH);
+      }
+      else {
+        _config_json.loadFromFile(_CONFIG_FILE_PATH);
+      }
     }
-
-
-    TODO: Create a method for parsing the keys in the 'Keys' class and apply them to the keys in the funcs below.
 
     
     /**
@@ -78,8 +89,8 @@ class Config {
      * @tparam default_value: Default value if the key doesn't exist
      */
     template <typename T>
-    T get(const std::string& key, const T& default_value = T{}) {
-      return _config_json.get(key, default_value);
+    static T get(const std::string& key, const T& default_value = T{}) {
+      return _config_json.get(key, default_value, Keys::SEPERATOR);
     }
 
 
@@ -90,8 +101,8 @@ class Config {
      * @param key: Key to read the json at
      * @param def: Default value returned if the key does not exist.
      */
-    std::string getString(const std::string& key, const std::string& def = "") {
-      return _config_json.getString(key, def);
+    static std::string getString(const std::string& key, const std::string& def = "") {
+      return _config_json.getString(key, def, Keys::SEPERATOR);
     }
 
 
@@ -102,8 +113,8 @@ class Config {
      * @param key: Key to read the json at
      * @param def: Default value returned if the key does not exist.
      */
-    int getInt(const std::string& key, int def = 0) {
-      return _config_json.getInt(key, def);
+    static int getInt(const std::string& key, int def = 0) {
+      return _config_json.getInt(key, def, Keys::SEPERATOR);
     }
 
 
@@ -114,8 +125,8 @@ class Config {
      * @param key: Key to read the json at
      * @param def: Default value returned if the key does not exist.
      */
-    double getDouble(const std::string& key, double def = 0.0) {
-      return _config_json.getDouble(key, def);
+    static double getDouble(const std::string& key, double def = 0.0) {
+      return _config_json.getDouble(key, def, Keys::SEPERATOR);
     }
 
     /**
@@ -125,8 +136,8 @@ class Config {
      * @param key: Key to read the json at
      * @param def: Default value returned if the key does not exist.
      */
-    bool getBool(const std::string& key, bool def = false) {
-      return _config_json.getBool(key, def);
+    static bool getBool(const std::string& key, bool def = false) {
+      return _config_json.getBool(key, def, Keys::SEPERATOR);
     }
 };
 

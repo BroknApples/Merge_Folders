@@ -3,8 +3,12 @@ cmake_minimum_required(VERSION 3.20)
 project(fmerge LANGUAGES CXX)
 
 set(SOURCES
+  # Main
   src/main.cpp
-  src/folder_merger.cpp
+  
+  # Core
+  src/core/filesystem.cpp
+  #src/core/merge_manager.cpp
 )
 
 set(INCLUDES

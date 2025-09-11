@@ -3,5 +3,8 @@
     "Window Height": 1920,
     "Window Width": 1080,
     "Stylesheet Path": "config/stylesheets/default_dark.json"
+  },
+  "Filesystem Settings": {
+    "Default Directory": "/"
   }
 }
